@@ -2,9 +2,110 @@
 
 {% block body %}
 
+    <style>
+       .stats{
+           margin-top: 10px;
+           background: rgb(255, 173, 173);
+       }
+       .updatedStats{
+           display: none;
+           background: rgb(133, 97, 233);
+       }
+    </style>
+
     <div class="container">
-        Username: {{username}}
-        Current Weight: {{weight}}
+        Username: {{request.user}}
+        <form action="" method="post">
+            {% csrf_token %}
+            Height: {{form.height}} in.
+            Weight: {{form.weight}} lb.
+            <input name="log" type="submit" value="log">
+        </form>
+    </div>
+
+    <div>
+        {% for stat in stat_list %}
+            <div class="stats">    
+                <div class="date">
+                    {{stat.date.month}}/{{stat.date.day}}/{{stat.date.year}}
+                </div>
+                <div class="height">Height: {{stat.height}} in.</div>
+                <div class="weight">Weight: {{stat.weight}} lbs.</div>
+                <button>edit</button>
+                <form action="" method="post">
+                    {% csrf_token %}     
+                    <div class="updatedStats">
+                        <label for="height">New Height:</label> <input required min="1" class = "newHeight" value="{{stat.height}}" type="number" name="height"> <br>
+                        <label for="weight">New Weight:</label> <input required min="1" class = "newWeight" value="{{stat.weight}}" type="number" name="weight">
+                        <input class="pk" name="key" type="hidden" readonly value="{{stat.pk}}">
+                        <input name="update" type="submit" value="update">
+                    </div>
+                </form>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input name="key" style="display:none" readonly value="{{stat.pk}}">
+                    <input name="remove" type="submit" value="remove">
+                </form>
+            </div>
+        {% empty %}
+            No data
+        {% endfor %}
+
+        <div>
+            <canvas id="myChart" width="100"></canvas>
+        </div>
+        <script>
+            let stats = document.querySelectorAll('.stats');
+            stats.forEach((stat)=>{
+                let button = stat.querySelector('button');
+                button.addEventListener('click', function() {
+                    let statId = stat.querySelector('.pk').value
+                    stats.forEach((stat)=>{
+                        if(stat.querySelector('.pk').value == statId){
+                            updated = stat.querySelector('.updatedStats')
+                            height = stat.querySelector('.height')
+                            weight = stat.querySelector('.weight')
+
+                            height.style.display = "none"
+                            weight.style.display = "none"
+                            updated.style.display = "block"
+                        }
+                    
+                    })
+                })
+            })
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            var myChart = document.getElementById("myChart").getContext("2d");
+            
+            let dates = document.querySelectorAll('.date');
+            let datelist = [];
+            dates.forEach((date) =>{
+                datelist.push(date.innerText.slice(0, -5));
+            })
+
+            let weight = document.querySelectorAll('.weight');
+            let weightList = []
+            weight.forEach((weight) =>{
+                value = weight.innerText.replace('Weight: ','');
+                value = parseInt(value.replace(' lbs.', ''));
+                weightList.push(value);
+            })
+
+            let popChart = new Chart(myChart,{
+                type: 'line',
+                data: {
+                    labels: datelist,
+                    datasets:[{
+                        label: 'Weight',
+                        data: weightList,
+                        borderColor: 'rgb(75, 192, 192)'
+                    }],
+                options:{}
+                }
+            })
+        </script>
     </div>
 
 {% endblock %}

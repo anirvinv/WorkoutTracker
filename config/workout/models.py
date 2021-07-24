@@ -14,4 +14,6 @@ class Stats(models.Model):
     user = models.ForeignKey(User, related_name='stats', on_delete=models.CASCADE)
     weight = models.IntegerField()
     height = models.IntegerField()
- 
+    date = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.weight} lb {self.height} in." 

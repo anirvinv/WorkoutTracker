@@ -17,6 +17,7 @@
 
     {{exercise.name}}
     {{exercise.volume}} reps
+    {{exercise.date.month}}/{{exercise.date.day}}/{{exercise.date.year}}
     <form action="" method="post">
         {% csrf_token %}
         <input name="key" type="text" value="{{exercise.pk}}" style="opacity:0"readonly>
