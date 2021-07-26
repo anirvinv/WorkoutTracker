@@ -1,7 +1,15 @@
-html, body{
-    margin: 0;
-}
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap");
 
-*{
-    box-sizing: border-box;
+$logo_color: rgb(140, 207, 160);
+
+html,
+body {
+	margin: 0;
+}
+.flex {
+	display: flex;
+}
+* {
+	box-sizing: border-box;
+	font-family: "Nunito", sans-serif;
 }

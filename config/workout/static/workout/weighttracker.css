@@ -1,0 +1,83 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap");
+html,
+body {
+  margin: 0;
+}
+
+.flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: "Nunito", sans-serif;
+}
+
+.statsContainer {
+  position: relative;
+}
+
+.statsContainer button,
+.statsContainer input[type="submit"] {
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  outline: none;
+  border: 2px solid #8ccfa0;
+  background-color: white;
+  border-radius: 5px;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.statsContainer button:hover,
+.statsContainer input[type="submit"]:hover {
+  background-color: #8ccfa0;
+  color: white;
+  cursor: pointer;
+}
+
+.statsContainer h1 {
+  text-align: center;
+}
+
+.statsContainer .stats {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.statsContainer .stats * {
+  margin-right: 13px;
+}
+
+.statsContainer .stats__date {
+  border-bottom: 2px solid #8ccfa0;
+}
+
+.statsContainer .logform {
+  text-align: center;
+}
+
+.statsContainer .updatedStats {
+  display: none;
+  background-color: white;
+}
+
+.statsContainer .updatedStats input[type="number"] {
+  width: 40px;
+}
+
+.chart {
+  width: 50%;
+}
+/*# sourceMappingURL=weighttracker.css.map */

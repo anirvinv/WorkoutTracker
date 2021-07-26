@@ -1,0 +1,16 @@
+@import "globals";
+
+.container2 {
+	height: 80vh;
+	width: 100%;
+	background-color: rgb(160, 253, 222);
+	.description {
+		h1 {
+			color: $logo_color;
+			font-size: 3rem;
+			text-align: center;
+			letter-spacing: 7px;
+			text-shadow: 5px 0px rgb(233, 233, 233);
+		}
+	}
+}

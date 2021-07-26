@@ -1,0 +1,141 @@
+{% extends 'workout/base.html' %}
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'workout/weighttracker.css'%}">
+{% endblock %}
+
+{% block body %}
+<div class="statsContainer">
+    <div class="logform">
+        <h1>Height/Weight Tracker</h1>
+        <form action="" method="post">
+            {% csrf_token %}
+            Height: {{form.height}} in.
+            Weight: {{form.weight}} lbs.
+            <input name="log" type="submit" value="log">
+        </form>
+    </div>
+    {% for stat in stat_list %}
+        <div class="stats">    
+            <div class="stats__date">
+                {{stat.date.month}}/{{stat.date.day}}/{{stat.date.year}}
+            </div>
+            <div class="height">Height: {{stat.height}} in.</div>
+            <div class="weight">Weight: {{stat.weight}} lbs.</div>
+            <button>edit</button>
+            <form action="" method="post">
+                {% csrf_token %}     
+                <div class="updatedStats">
+                    <label for="height">Height:</label> <input required min="1" class = "newHeight" value="{{stat.height}}" type="number" name="height"> <br>
+                    <label for="weight">Weight:</label> <input required min="1" class = "newWeight" value="{{stat.weight}}" type="number" name="weight">
+                    <input class="pk" name="key" type="hidden" readonly value="{{stat.pk}}">
+                    <input name="update" type="submit" value="update">
+                </div>
+            </form>
+            <form action="" method="post">
+                {% csrf_token %}
+                <input name="key" style="display:none" readonly value="{{stat.pk}}">
+                <input name="remove" type="submit" value="remove">
+            </form>
+        </div>
+    {% empty %}
+        No data
+    {% endfor %}
+
+    <div class="flex">
+        <div class="chart">
+            <h1>Weight</h1>
+            <canvas id="myChart"></canvas>
+        </div>
+        <div class="chart">
+            <h1>BMI</h1>
+            <canvas id="BMIChart"></canvas>
+        </div>
+    </div>
+    <script>
+        let stats = document.querySelectorAll('.stats');
+        stats.forEach((stat)=>{
+            let button = stat.querySelector('button');
+            button.addEventListener('click', function() {
+                let statId = stat.querySelector('.pk').value
+                stats.forEach((stat)=>{
+                    if(stat.querySelector('.pk').value == statId){
+                        updated = stat.querySelector('.updatedStats')
+                        height = stat.querySelector('.height')
+                        weight = stat.querySelector('.weight')
+
+                        button.style.display = 'none'
+                        height.style.display = "none"
+                        weight.style.display = "none"
+                        updated.style.display = "flex"
+                    }
+                
+                })
+            })
+        })
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function BMI(weight, height){
+            return 703 * weight / (height * height);
+        }
+
+        var myChart = document.getElementById("myChart").getContext("2d");
+        
+        let dates = document.querySelectorAll('.stats__date');
+        let datelist = [];
+        dates.forEach((date) =>{
+            datelist.push(date.innerText.slice(0, -5));
+        })
+
+        let weight = document.querySelectorAll('.weight');
+        let weightList = []
+        weight.forEach((weight) =>{
+            value = weight.innerText.replace('Weight: ','');
+            value = parseInt(value.replace(' lbs.', ''));
+            weightList.push(value);
+        })
+
+        let bmiChart = document.getElementById("BMIChart").getContext("2d");
+
+        let heights = document.querySelectorAll('.height');
+        let bmiList = []
+
+        for(let i = 0; i < heights.length; i++){
+            height = heights[i].innerText.replace('Height: ','');
+            height = parseInt(height.replace(' in.', ''));
+            bmi = BMI(weightList[i], height);
+            bmiList.push(bmi);
+        }
+
+        let BMIChart = new Chart(bmiChart, {
+            type: 'line',
+            data:{
+                labels: datelist,
+                datasets:[{
+                    label: 'BMI',
+                    data: bmiList,
+                    borderColor: 'red'
+                    }],
+            options:{}
+            }
+        })
+
+        let popChart = new Chart(myChart,{
+            type: 'line',
+            data: {
+                labels: datelist,
+                datasets:[{
+                    label: 'Weight',
+                    data: weightList,
+                    borderColor: 'rgb(75, 192, 192)'
+                }],
+            options:{}
+            }
+        })
+        
+        
+    </script>
+</div>
+
+{% endblock %}

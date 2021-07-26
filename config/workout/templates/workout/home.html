@@ -1,6 +1,10 @@
 {% extends 'workout/base.html' %}
 {% load static %}
 
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'workout/home.css'%}">
+{% endblock %}
+
 {% block body %}
 
 {% if request.user.is_authenticated %}
@@ -28,7 +32,13 @@
     There are no exercises yet.
     {% endfor %}
 {% else %}
-
+    <div class="container2">
+        <div class="description">
+            <h1>
+                Make Logging Simple!
+            </h1>
+        </div>
+    </div>
 {% endif %}
 
 {% endblock %}
