@@ -108,6 +108,16 @@
             bmiList.push(bmi);
         }
 
+        under = []
+        average = []
+        over = []
+        for(let i = 0; i < datelist.length; i++){
+            under.push(18.5)
+            average.push(25)
+            over.push(30)
+        }
+
+
         let BMIChart = new Chart(bmiChart, {
             type: 'line',
             data:{
@@ -115,8 +125,24 @@
                 datasets:[{
                     label: 'BMI',
                     data: bmiList,
-                    borderColor: 'red'
-                    }],
+                    borderColor: 'rgb(75, 192, 192)'
+                    },
+                    {
+                        label:"Underweight",
+                        data: under,
+                        backgroundColor: 'rgb(255,178,102,0.2)'
+                    },
+                    {
+                        label:"Average",
+                        data: average,
+                        borderColor: 'rgb(0,255,0,0.2)'
+                    },
+                    {
+                        label:"Overweight",
+                        data: over,
+                        borderColor: 'rgb(255,0,0,0.2)'
+                    },
+                    ],
             options:{}
             }
         })

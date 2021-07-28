@@ -11,34 +11,227 @@
     <div class="container">
         <form action="" method="post">
             {% csrf_token %}
-            Name: {{form.name}}
+            Exercise: {{form.name}}
             Total volume: {{form.volume}}
+            RPE: {{form.rpe}}
+            Type:<select name="exercise_type" id="type">
+                <option value=""></option>
+                <option value="push">Push</option>
+                <option value="pull">Pull</option>
+                <option value="core">Core</option>
+                <option value="legs">Legs</option>
+                </select>
             <input type="submit" value="add">
         </form>
+    
+    <!-- {{exercise_dates}} -->
+    {% for date, exercise_list in exercise_dates %}
+    <div class="date">
+        <h1>{{date}}</h1>
     </div>
+    
+        {% for exercise in exercise_list %}
+            
+        <div class="exercise" data-date="{{date}}" data-reps="{{exercise.volume}}" data-type="{{exercise.exercise_type}}">
+            <div class="volume flex">
+                <div class="name">{{exercise}}:</div>
+                <div class="reps">{{exercise.volume}} reps </div> 
+                <div class="rpe">RPE: {{exercise.rpe}} </div> 
+                <div class="exercise_type">{{exercise.exercise_type.upper}}</div>
+            </div>
+        <div class="flex">
+            <button class="edit">edit</button>
+            <form class="updateForm" action="" method="post">
+            {% csrf_token %}
+            Exercise: <input name="name" type="text" value="{{exercise.name}}">
+            Total volume: <input name="volume" type="number" min=0 value={{exercise.volume}}>
+            RPE: <input name="rpe" type="number" min=1 max=10 value="{{exercise.rpe}}">
+            Type:<select name="exercise_type" id="type">
+            <option value=""></option>
+            <option value="push">Push</option>
+            <option value="pull">Pull</option>
+            <option value="core">Core</option>
+            <option value="legs">Legs</option>
+            </select>
+                <input class="pk" name="key" type="hidden" value="{{exercise.pk}}" >
+                <input id="update" name="update" type="submit" value="update">
+            </form>
+            <form class="removeForm" action="" method="post">
+                {% csrf_token %}
+                <input class="pk" name="key" type="hidden" value="{{exercise.pk}}" readonly>
+                <input id="remove" name="remove" type="submit" value="remove">
+            </form>
+        </div>
+    </div>
+    {% empty %}
+    <div class="exercise">No exercises</div>
+    {% endfor %}
 
-    {% for exercise in exercises %}
-
-    {{exercise.name}}
-    {{exercise.volume}} reps
-    {{exercise.date.month}}/{{exercise.date.day}}/{{exercise.date.year}}
-    <form action="" method="post">
-        {% csrf_token %}
-        <input name="key" type="text" value="{{exercise.pk}}" style="opacity:0"readonly>
-        <input type="submit" value="remove">
-    </form>
-
+   
     {% empty %}
     There are no exercises yet.
     {% endfor %}
+    </div>
+    <div>
+        <canvas id="myCanvas"></canvas>
+    </div>
+
 {% else %}
     <div class="container2">
         <div class="description">
             <h1>
                 Make Logging Simple!
             </h1>
+            <div class="flex">
+                <div>
+                    
+                </div>
+            </div>
+
         </div>
     </div>
+
 {% endif %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let exercise_divs = document.querySelectorAll('.exercise');
+    let buttons = document.querySelectorAll('.edit');
+    buttons.forEach((button) =>{
+        button.addEventListener('click', () => {
+            let pk = button.parentNode.parentNode.querySelector('.pk').value;
+            exercise_divs.forEach((div) =>{
+                if(div.querySelector('.pk').value == pk){
+                    div.querySelector('.edit').style.display="none"
+                    
+                    updateForm = div.querySelector('.updateForm');
+                    values = div.querySelector('.volume')
+                    updateForm.style.display="flex"
+                    values.style.display="none"
+                    
+                    exercise_type = values.querySelector('.exercise_type').innerText.toLowerCase();
+                    
+                    selectField = updateForm.querySelector('select')
+                    options = selectField.querySelectorAll('option')
+                    
+                    options.forEach((option) =>{
+                        if(option.value == exercise_type){
+                            option.selected = true
+                        }
+                    })
+                      
+                }
+            })
+        }
+        )
+    });
+</script>
+
+<script>
+    let canvas = document.querySelector('#myCanvas');
+    let ctx = canvas.getContext('2d');
+    let dates = document.querySelectorAll('.date');
+    datelist = [];
+    dates.forEach((date) =>{
+        datelist.push(date.innerText);
+    })
+    exercises = document.querySelectorAll('.exercise')
+    exercises.forEach((exercise)=>{
+        let date = exercise.dataset.date;
+        
+    })
+    data = {}
+    datelist.forEach((date) =>{
+        push = 0
+        pull = 0
+        core = 0
+        legs = 0
+
+        exercises.forEach((exercise)=>{
+            if(exercise.dataset.date == date){
+                switch(exercise.dataset.type){
+                    case "push":
+                        push += parseInt(exercise.dataset.reps);
+                        break;
+                    case "pull":
+                        pull += parseInt(exercise.dataset.reps);
+                        break;
+                    case "core":
+                        core += parseInt(exercise.dataset.reps);
+                        break;
+                    case "legs":
+                        legs += parseInt(exercise.dataset.reps);
+                        break;
+                }
+            }
+        })
+        data[date] = [push, pull, core, legs]
+    })
+    pushData = []
+    pullData = []
+    coreData = []
+    legsData = []
+
+    for(let [key, value] of Object.entries(data)){
+        pushData.push(value[0])
+        pullData.push(value[1])
+        coreData.push(value[2])
+        legsData.push(value[3])  
+    }
+    console.log(pushData)
+    console.log(pullData)
+    console.log(coreData)
+    console.log(legsData)
+    /*
+        example = {"date1": [30, 20, 10, 0],
+                    "date2": [40, 30, 20, 10],}
+    */
+
+    chart = new Chart(ctx, 
+    {type: 'bar',
+    options: {
+        plugins: {
+          title: {
+            display: true,
+            text: 'Daily Workout'
+          },
+        },
+        responsive: true,
+        scales: {
+          x: {
+            stacked: true,
+          },
+          y: {
+            stacked: true
+          }
+        }
+      },
+        data:{
+            labels: datelist,
+            datasets:[{
+                    label: 'Push',
+                    data: pushData,
+                    backgroundColor: 'rgba(255, 99, 132)',
+                },
+                {
+                    label: 'Pull',
+                    data: pullData,
+                    backgroundColor: 'rgba(54, 162, 235)',
+                },
+                {
+                    label: 'Core',
+                    data: coreData,
+                    backgroundColor: 'rgba(255, 206, 86)',
+
+                },
+                {
+                    label: 'Legs',
+                    data: legsData,
+                    backgroundColor: 'rgba(75, 192, 192)',
+                },
+                ],
+                
+        }
+    })
+</script>
 
 {% endblock %}

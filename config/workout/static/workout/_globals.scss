@@ -13,3 +13,24 @@ body {
 	box-sizing: border-box;
 	font-family: "Nunito", sans-serif;
 }
+
+input[type="text"],
+input[type="number"] {
+	outline: none;
+	font-weight: bold;
+}
+button,
+input[type="submit"] {
+	height: fit-content;
+	outline: none;
+	border: 2px solid $logo_color;
+	background-color: white;
+	border-radius: 5px;
+	transition: 0.2s;
+}
+button:hover,
+input[type="submit"]:hover {
+	background-color: $logo_color;
+	color: white;
+	cursor: pointer;
+}

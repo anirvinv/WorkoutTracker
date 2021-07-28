@@ -8,27 +8,49 @@ from .models import *
 
 def index(request):
     if request.method == "POST":
-        if "key" in request.POST:
+        if "remove" in request.POST:
             key = request.POST['key']
             request.user.exercises.get(pk=key).delete()
+            return redirect('home')
+        elif "update" in request.POST:
+            name = request.POST['name']
+            volume = request.POST['volume']
+            rpe = request.POST['rpe']
+            exercise_type = request.POST['exercise_type']
+            key = request.POST['key']
+            Exercise.objects.filter(pk=key).update(
+                name=name, volume=volume, rpe=rpe, exercise_type=exercise_type)
             return redirect('home')
         else:
             form = ExerciseForm(request.POST)
             if form.is_valid():
                 name = form.cleaned_data['name']
                 volume = form.cleaned_data['volume']
+                rpe = form.cleaned_data['rpe']
+                exercise_type = request.POST['exercise_type']
                 exercise = Exercise(user=request.user,
-                                    name=name, volume=volume)
+                                    name=name, volume=volume,
+                                    rpe=rpe, exercise_type=exercise_type)
                 exercise.save()
                 return redirect('home')
             else:
+
                 return render(request, 'workout/index.html', context={'form': form})
     else:
         if request.user.is_authenticated:
             exercises = request.user.exercises.all()
+            exercise_dates = {}
+            for exercise in exercises:
+                date = f"{exercise.date.month}/{exercise.date.day}/{exercise.date.year}"
+                # date = f"{exercise.date.time()}"
+                if date in exercise_dates.keys():
+                    exercise_dates[date] += [exercise]
+                    # pass
+                else:
+                    exercise_dates[date] = [exercise]
         else:
-            exercises = []
-    return render(request, 'workout/home.html', context={'form': ExerciseForm(), 'exercises': exercises})
+            exercise_dates = {}
+    return render(request, 'workout/home.html', context={'form': ExerciseForm(), 'exercise_dates': exercise_dates.items()})
 
 
 def weighttracker(request):

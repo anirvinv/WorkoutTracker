@@ -16,17 +16,129 @@ body {
   font-family: "Nunito", sans-serif;
 }
 
+input[type="text"],
+input[type="number"] {
+  outline: none;
+  font-weight: bold;
+}
+
+button,
+input[type="submit"] {
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  outline: none;
+  border: 2px solid #8ccfa0;
+  background-color: white;
+  border-radius: 5px;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+button:hover,
+input[type="submit"]:hover {
+  background-color: #8ccfa0;
+  color: white;
+  cursor: pointer;
+}
+
 .container2 {
   height: 80vh;
   width: 100%;
-  background-color: #a0fdde;
 }
 
 .container2 .description h1 {
+  margin: auto;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
   color: #8ccfa0;
   font-size: 3rem;
-  text-align: center;
   letter-spacing: 7px;
   text-shadow: 5px 0px #e9e9e9;
+}
+
+.container {
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  width: 100%;
+  padding: 30px;
+}
+
+.container form input[type="number"] {
+  width: 50px;
+}
+
+.container .date h1 {
+  font-size: 30px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  border-bottom: 3px solid #8ccfa0;
+}
+
+.container .exercise {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-bottom: 15px;
+}
+
+.container .exercise .flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 10px;
+}
+
+.container .exercise .volume {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  font-size: 20px;
+}
+
+.container .exercise .volume .name {
+  text-transform: capitalize;
+}
+
+.container .exercise .volume .reps {
+  background-color: #a3fcff;
+}
+
+.container .exercise .volume .rpe {
+  background-color: #9cfc9c;
+}
+
+.container .exercise .volume .exercise_type {
+  background-color: #ffadad;
+}
+
+.container .exercise .volume div {
+  border-radius: 5px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin-right: 5px;
+}
+
+.container .exercise button {
+  margin-right: 5px;
+}
+
+.container .exercise .updateForm {
+  display: none;
+}
+
+.container .exercise .updateForm * {
+  margin-right: 5px;
 }
 /*# sourceMappingURL=home.css.map */
