@@ -8,71 +8,77 @@
 {% block body %}
 
 {% if request.user.is_authenticated %}
-    <div class="container">
-        <form action="" method="post">
-            {% csrf_token %}
-            Exercise: {{form.name}}
-            Total volume: {{form.volume}}
-            RPE: {{form.rpe}}
-            Type:<select name="exercise_type" id="type">
-                <option value=""></option>
-                <option value="push">Push</option>
-                <option value="pull">Pull</option>
-                <option value="core">Core</option>
-                <option value="legs">Legs</option>
-                </select>
-            <input type="submit" value="add">
-        </form>
-    
-    <!-- {{exercise_dates}} -->
-    {% for date, exercise_list in exercise_dates %}
-    <div class="date">
-        <h1>{{date}}</h1>
-    </div>
-    
-        {% for exercise in exercise_list %}
-            
-        <div class="exercise" data-date="{{date}}" data-reps="{{exercise.volume}}" data-type="{{exercise.exercise_type}}">
-            <div class="volume flex">
-                <div class="name">{{exercise}}:</div>
-                <div class="reps">{{exercise.volume}} reps </div> 
-                <div class="rpe">RPE: {{exercise.rpe}} </div> 
-                <div class="exercise_type">{{exercise.exercise_type.upper}}</div>
-            </div>
-        <div class="flex">
-            <button class="edit">edit</button>
-            <form class="updateForm" action="" method="post">
-            {% csrf_token %}
-            Exercise: <input name="name" type="text" value="{{exercise.name}}">
-            Total volume: <input name="volume" type="number" min=0 value={{exercise.volume}}>
-            RPE: <input name="rpe" type="number" min=1 max=10 value="{{exercise.rpe}}">
-            Type:<select name="exercise_type" id="type">
+
+    <form class="input_form" action="" method="post">
+        <h2>Log Exercise</h2>
+        {% csrf_token %}
+        Exercise: {{form.name}}
+        Total volume: {{form.volume}}
+        RPE: {{form.rpe}}
+        Type:<select name="exercise_type" id="type">
             <option value=""></option>
             <option value="push">Push</option>
             <option value="pull">Pull</option>
             <option value="core">Core</option>
             <option value="legs">Legs</option>
             </select>
-                <input class="pk" name="key" type="hidden" value="{{exercise.pk}}" >
-                <input id="update" name="update" type="submit" value="update">
-            </form>
-            <form class="removeForm" action="" method="post">
-                {% csrf_token %}
-                <input class="pk" name="key" type="hidden" value="{{exercise.pk}}" readonly>
-                <input id="remove" name="remove" type="submit" value="remove">
-            </form>
+        <input type="submit" value="add">
+    </form>
+    <div class="container">
+        
+    
+    <!-- {{exercise_dates}} -->
+    {% for date, exercise_list in exercise_dates %}
+    <div class="exercise_container">
+        <div class="date" data-date="{{date}}">
+            <h1>{{date}}</h1>
+            <button class="hide_day" data-date="{{date}}">hide</button>
         </div>
+        
+            {% for exercise in exercise_list %}
+                
+            <div class="exercise" data-date="{{date}}" data-reps="{{exercise.volume}}" data-type="{{exercise.exercise_type}}">
+                <div class="volume flex">
+                    <div class="name">{{exercise}}:</div>
+                    <div class="reps">{{exercise.volume}} reps </div> 
+                    <div class="rpe">RPE: {{exercise.rpe}} </div> 
+                    <div class="exercise_type">{{exercise.exercise_type.upper}}</div>
+                </div>
+            <div class="flex">
+                <button class="edit">edit</button>
+                <form class="updateForm" action="" method="post">
+                {% csrf_token %}
+                Exercise: <input name="name" type="text" value="{{exercise.name}}">
+                Total volume: <input name="volume" type="number" min=0 value={{exercise.volume}}>
+                RPE: <input name="rpe" type="number" min=1 max=10 value="{{exercise.rpe}}">
+                Type:<select name="exercise_type" id="type">
+                <option value=""></option>
+                <option value="push">Push</option>
+                <option value="pull">Pull</option>
+                <option value="core">Core</option>
+                <option value="legs">Legs</option>
+                </select>
+                    <input class="pk" name="key" type="hidden" value="{{exercise.pk}}" >
+                    <input id="update" name="update" type="submit" value="update">
+                </form>
+                <form class="removeForm" action="" method="post">
+                    {% csrf_token %}
+                    <input class="pk" name="key" type="hidden" value="{{exercise.pk}}" readonly>
+                    <input id="remove" name="remove" type="submit" value="remove">
+                </form>
+            </div>
+        </div>
+        {% empty %}
+        <div class="exercise">No exercises</div>
+        {% endfor %}
+    
     </div>
-    {% empty %}
-    <div class="exercise">No exercises</div>
-    {% endfor %}
-
    
     {% empty %}
     There are no exercises yet.
     {% endfor %}
     </div>
-    <div>
+    <div class="canvas_container">
         <canvas id="myCanvas"></canvas>
     </div>
 
@@ -82,16 +88,23 @@
             <h1>
                 Make Logging Simple!
             </h1>
-            <div class="flex">
-                <div>
-                    
-                </div>
-            </div>
-
+            <img src="{% static 'workout/images/example1.PNG' %}" alt="">
+            <p>
+                Log your workouts everyday and see your progress!
+            </p>
+            <img id="graphimg" src="{% static 'workout/images/graph.PNG' %}" alt="">
         </div>
+        <div class="description2">
+            <h1>
+                Track your BMI
+            </h1>
+                <img src="{% static 'workout/images/bmi.PNG' '%}" alt="">            
+        </div>
+
     </div>
 
 {% endif %}
+{% if user.is_authenticated %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     let exercise_divs = document.querySelectorAll('.exercise');
@@ -132,7 +145,7 @@
     let dates = document.querySelectorAll('.date');
     datelist = [];
     dates.forEach((date) =>{
-        datelist.push(date.innerText);
+        datelist.push(date.querySelector('h1').innerText);
     })
     exercises = document.querySelectorAll('.exercise')
     exercises.forEach((exercise)=>{
@@ -177,10 +190,6 @@
         coreData.push(value[2])
         legsData.push(value[3])  
     }
-    console.log(pushData)
-    console.log(pullData)
-    console.log(coreData)
-    console.log(legsData)
     /*
         example = {"date1": [30, 20, 10, 0],
                     "date2": [40, 30, 20, 10],}
@@ -229,9 +238,36 @@
                     backgroundColor: 'rgba(75, 192, 192)',
                 },
                 ],
-                
         }
     })
 </script>
 
+<script>
+    buttons = document.querySelectorAll('.hide_day')
+    exercise_divs = document.querySelectorAll('.exercise')
+    buttons.forEach((button) =>{
+        button.addEventListener('click', () => {
+            value = button.dataset.date
+            exercise_divs.forEach((div) =>{
+                if(div.dataset.date == value){
+                    if(button.innerText=="hide"){
+                        div.style.display="none"
+                        setTimeout(()=>{
+                            button.innerText="show"
+                        }, 1)
+                    }
+                    else if(button.innerText=="show"){
+                        div.style.display="block"
+                        setTimeout(()=>{
+                            button.innerText="hide"
+                        }, 1)
+                    }
+                }
+            })
+            
+        })       
+    })
+      
+</script>
+{% endif %}
 {% endblock %}

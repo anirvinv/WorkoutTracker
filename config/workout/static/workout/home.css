@@ -47,18 +47,81 @@ input[type="submit"]:hover {
   width: 100%;
 }
 
+.container2 .description {
+  text-align: center;
+}
+
 .container2 .description h1 {
   margin: auto;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   color: #8ccfa0;
-  font-size: 3rem;
+  font-size: 2.6rem;
   letter-spacing: 7px;
   text-shadow: 5px 0px #e9e9e9;
 }
 
+.container2 .description img {
+  width: 600px;
+  border-radius: 50px;
+  border: 3px solid #8ccfa0;
+  margin: 30px;
+}
+
+.container2 .description #graphimg {
+  width: 800px;
+  padding: 20px;
+}
+
+.container2 .description div {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+.container2 .description2 {
+  text-align: center;
+}
+
+.container2 .description2 h1 {
+  margin: auto;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  color: #8ccfa0;
+  font-size: 2.6rem;
+  letter-spacing: 7px;
+  text-shadow: 5px 0px #e9e9e9;
+}
+
+.container2 .description2 img {
+  width: 80%;
+  border-radius: 50px;
+  border: 3px solid #8ccfa0;
+  margin-top: 30px;
+  padding: 20px;
+}
+
+.input_form {
+  text-align: center;
+}
+
+.exercise_container {
+  height: 100%;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: auto;
+}
+
 .container {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+  -ms-grid-rows: auto;
+      grid-template-rows: auto;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
@@ -70,7 +133,17 @@ input[type="submit"]:hover {
   width: 50px;
 }
 
+.container .date {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 .container .date h1 {
+  margin-right: 10px;
   font-size: 30px;
   width: -webkit-fit-content;
   width: -moz-fit-content;
@@ -79,6 +152,9 @@ input[type="submit"]:hover {
 }
 
 .container .exercise {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -86,9 +162,6 @@ input[type="submit"]:hover {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
   margin-bottom: 15px;
 }
 
@@ -140,5 +213,13 @@ input[type="submit"]:hover {
 
 .container .exercise .updateForm * {
   margin-right: 5px;
+}
+
+.canvas_container {
+  width: 70%;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  margin: auto;
 }
 /*# sourceMappingURL=home.css.map */
