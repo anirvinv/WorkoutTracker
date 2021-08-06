@@ -71,9 +71,7 @@
         {% empty %}
         <div class="exercise">No exercises</div>
         {% endfor %}
-    
     </div>
-   
     {% empty %}
     There are no exercises yet.
     {% endfor %}
@@ -100,7 +98,6 @@
             </h1>
                 <img src="{% static 'workout/images/bmi.PNG' '%}" alt="">            
         </div>
-
     </div>
 
 {% endif %}
@@ -149,8 +146,7 @@
     })
     exercises = document.querySelectorAll('.exercise')
     exercises.forEach((exercise)=>{
-        let date = exercise.dataset.date;
-        
+        let date = exercise.dataset.date;   
     })
     data = {}
     datelist.forEach((date) =>{
