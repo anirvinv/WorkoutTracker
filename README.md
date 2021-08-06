@@ -2,6 +2,8 @@
 
 Simple method of tracking your day to day workouts as well as your weight.
 
+Try it out at https://anirvinv.pythonanywhere.com/workout/ !
+
 ## Functionalities
 
     1. User authentication with Oauth(maybe later)
